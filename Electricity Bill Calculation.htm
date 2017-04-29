@@ -1,0 +1,538 @@
+<html>
+
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+    <meta name=Generator content="Microsoft Word 15 (filtered)">
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="angular.min.js" type="text/javascript"></script>
+</head>
+
+<body ng-app="calculator" ng-controller="BillController" lang=EN-US>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form ng-submit="addNew()" class="">
+                        <div class="row">
+                            <div class="col-lg-4">
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Heading</label>
+                                            <input type="text" value="" ng-model="billDetails.heading" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+
+                                        <div class="form-group">
+                                            <label class="control-label">Bill Payable Amount</label>
+                                            <input type="number" value="" ng-model="billDetails.payable" class="form-control" style="max-width: 120px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Bill Units</label>
+                                            <input type="number" value="" ng-model="billDetails.units" class="form-control" style="max-width: 120px;">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Bill Rental</label>
+                                            <input type="number" value="" ng-model="billDetails.rent" class="form-control" style="max-width: 120px;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h4 class="">Floor Units Consumptions & Cost</h4>
+                                <table class="table table-striped table-condensed table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th><input type="checkbox" ng-model="selectedAll" ng-click="checkAll()" /></th>
+                                        <th>Floor name</th>
+                                        <th>Units</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="floorDetail in floorsDetails">
+                                        <td>
+                                            <input type="checkbox" ng-model="floorDetail.selected"/></td>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" ng-model="floorDetail.fname" required/></td>
+                                        <td>
+                                            <input type="number" class="form-control input-sm" style="max-width: 120px" ng-model="floorDetail.units" required/></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <input ng-hide="!floorsDetails.length" type="button" class="btn btn-danger btn-sm pull-right" ng-click="remove()" value="Remove">
+                                <input type="submit" class="btn btn-primary btn-sm addnew pull-right" value="Add New">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="center-block">
+                        <input type="button" class="btn btn-success btn-lg " value="Calculate" ng-click="calculate()">
+
+                            <button type="button" class="btn btn-primary btn-lg" value="Print" onclick="window.print()">Print </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class=WordSection1>
+
+    <h1 align=center style='text-align:center' id="txt_heading" ><b ng-bind="billDetails.heading"></b></h1>
+
+    <p class=MsoNormal><span style='font-size:6.0pt;line-height:107%'>&nbsp;</span></p>
+
+    <table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 width=630
+           style='width:472.55pt;border-collapse:collapse;border:none'>
+        <tr style='height:20.65pt'>
+            <td width=420 colspan=2 style='width:315.0pt;border:solid windowtext 1.0pt;
+  background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:20.65pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total Bill Payable Amount</b></p>
+            </td>
+            <td width=210 style='width:157.55pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0in 5.4pt 0in 5.4pt;height:20.65pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Rs. {{billDetails.payable | number}}</b></p>
+            </td>
+        </tr>
+        <tr style='height:19.55pt'>
+            <td width=420 colspan=2 style='width:315.0pt;border:solid windowtext 1.0pt;
+  border-top:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:19.55pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total Unit Consumption</b></p>
+            </td>
+            <td width=210 style='width:157.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:19.55pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b><span id="txt_bill_units" >{{billDetails.units | number}}</span></b></p>
+            </td>
+        </tr>
+        <tr style='height:19.55pt'>
+            <td width=312 style='width:233.75pt;border:solid windowtext 1.0pt;border-top:
+  none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:19.55pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Per Unit Cost</b></p>
+            </td>
+            <td width=108 style='width:81.25pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:19.55pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b><span id="txt_frml_unit_cost">{{billDetails.payable | number}} / {{billDetails.units | number}}</span></b></p>
+            </td>
+            <td width=210 style='width:157.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:19.55pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Rs. <span id="txt_unit_cost">{{ unitCost | number:2 }}</span> /unit </b>
+            </td>
+        </tr>
+        <tr height=0>
+            <td width=312 style='border:none'></td>
+            <td width=108 style='border:none'></td>
+            <td width=210 style='border:none'></td>
+        </tr>
+    </table>
+
+    <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt'>&nbsp;</p>
+
+    <h2><b>Floor Unit Consumptions &amp; Cost</b></h2>
+    <p class=MsoNormal>Recorded are the details provided by the owner of the floor.
+    </p>
+
+    <table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 width="100%"
+           style='width:100.0%;border-collapse:collapse;border:none'>
+        <tr style='height:17.1pt'>
+            <td width="22%" style='width:22.6%;border:solid windowtext 1.0pt;background:
+  #F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:17.1pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Floor</b></p>
+            </td>
+            <td width="17%" style='width:17.78%;border:solid windowtext 1.0pt;border-left:
+  none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:17.1pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Units Recorded</b></p>
+            </td>
+            <td width="17%" style='width:17.24%;border:solid windowtext 1.0pt;border-left:
+  none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:17.1pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Unit Cost </b>(Rs.)</p>
+            </td>
+            <td width="15%" style='width:15.18%;border:solid windowtext 1.0pt;border-left:
+  none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:17.1pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>&nbsp;</b></p>
+            </td>
+            <td width="27%" valign=top style='width:27.2%;border:solid windowtext 1.0pt;
+  border-left:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:17.1pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total </b>(Rs.)</p>
+            </td>
+        </tr>
+        <tr style='height:16.15pt' ng-repeat="floorDetail in floorsDetails">
+            <td width="22%" style='width:22.6%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal' >{{ floorDetail.fname }}</p>
+            </td>
+            <td width="17%" style='width:17.78%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal' >{{floorDetail.units | number}}</p>
+            </td>
+            <td width="17%" style='width:17.24%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'  id="txt_ground_unit_cost">{{ unitCost | number:2 }}</p>
+            </td>
+            <td width="15%" style='width:15.18%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal' id="txt_frml_ground_cost_1">{{floorDetail.units | number}} x {{ unitCost | number:2 }}</p>
+            </td>
+            <td width="27%" valign=top style='width:27.2%;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>{{floorDetail.pretotal | number:2}}</b></p>
+            </td>
+        </tr>
+        <tr style='height:18.4pt'>
+            <td width="22%" style='width:22.6%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0in 5.4pt 0in 5.4pt;height:18.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total Recorded</b></p>
+            </td>
+            <td width="17%" style='width:17.78%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:18.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>{{ floorsTotal.units | number}}</b></p>
+            </td>
+            <td width="17%" style='width:17.24%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:18.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>&nbsp;</p>
+            </td>
+            <td width="15%" style='width:15.18%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:18.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>&nbsp;</p>
+            </td>
+            <td width="27%" valign=top style='width:27.2%;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:18.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>{{ floorsTotal.pretotal | number:2}}</b></p>
+            </td>
+        </tr>
+    </table>
+
+    <p class=MsoNormal>&nbsp;</p>
+
+    <h2><b>Difference Outcome</b></h2>
+
+    <p class=MsoNormal><span style='font-size:1.0pt;line-height:107%'>&nbsp;</span></p>
+
+    <table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+           style='border-collapse:collapse;border:none'>
+        <tr>
+            <td width=312 valign=top style='width:233.75pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>&nbsp;</p>
+            </td>
+            <td width=90 valign=top style='width:67.5pt;border:solid windowtext 1.0pt;
+  border-left:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Units</b></p>
+            </td>
+            <td width=222 valign=top style='width:166.25pt;border:solid windowtext 1.0pt;
+  border-left:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Cost</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td width=312 valign=top style='width:233.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total Billed Actual</b></p>
+            </td>
+            <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ billDetails.units | number}}</p>
+            </td>
+            <td width=222 valign=top style='width:166.25pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ billDetails.payable | number:2 }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td width=312 valign=top style='width:233.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Total Recorded</b></p>
+            </td>
+            <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ floorsTotal.units | number}}</p>
+            </td>
+            <td width=222 valign=top style='width:166.25pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ floorsTotal.pretotal | number:2 }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td width=312 valign=top style='width:233.75pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Difference </b></p>
+            </td>
+            <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>{{ floorsTotal.diff_units | number}}</b></p>
+            </td>
+            <td width=222 valign=top style='width:166.25pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>{{ floorsTotal.diff_pretotal | number:2}}</b></p>
+            </td>
+        </tr>
+    </table>
+
+    <p class=MsoNormal>&nbsp;</p>
+
+    <h2 style='margin-bottom:12.0pt'><b>Final Calculations</b></h2>
+
+    <p class=MsoNormal><b>Proportionate Formula</b>: (Floor Recorded Units / Total
+        Recorded Units) x Difference Total Cost</p>
+
+    <p class=MsoNormal>Actual Difference Cost = {{ floorsTotal.diff_pretotal | number:2 }} – {{ billDetails.rent | number}} (Rentals*) = <b>Rs.</b>
+        <b>{{ floorsTotal.diff_actual | number:2 }}</b></p>
+
+    <p class=MsoNormal>*<span style='color:red'>Rentals amount will be equally
+divided to all</span>. {{ billDetails.rent | number}} / {{ floorsDetails.length }}<b> = Rs. {{ floorsTotal.rent | number:2}}</b></p>
+
+    <table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0 width="100%"
+           style='width:100.0%;border-collapse:collapse;border:none'>
+        <tr style='height:22.0pt'>
+            <td width="15%" style='width:15.34%;border:solid windowtext 1.0pt;background:
+  #F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:22.0pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Floor</b></p>
+            </td>
+            <td width="17%" style='width:17.34%;border:solid windowtext 1.0pt;border-left:
+  none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:22.0pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'><b>Units Recorded</b></p>
+            </td>
+            <td width="33%" style='width:33.68%;border:solid windowtext 1.0pt;
+  border-left:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:22.0pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal;text-align:right;'><b>Proportionated Difference</b></p>
+            </td>
+            <td width="33%" style='width:33.64%;border:solid windowtext 1.0pt;
+  border-left:none;background:#F2F2F2;padding:0in 5.4pt 0in 5.4pt;height:22.0pt'>
+                <p class=MsoNormal align=right style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal'><b>Total </b>(Rs.)</p>
+            </td>
+        </tr>
+        <tr style='height:16.15pt'  ng-repeat="floorDetail in floorsDetails">
+            <td width="15%" style='width:15.34%;border:solid windowtext 1.0pt;border-top:
+  none;padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ floorDetail.fname }}</p>
+            </td>
+            <td width="17%" style='width:17.34%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal'>{{ floorDetail.units | number }}</p>
+            </td>
+            <td width="24%" style='width:24.06%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal;text-align:right;'>( {{ floorDetail.units | number }} / {{ floorsTotal.units | number }} x {{ floorsTotal.diff_actual | number:2 }} ) + {{ floorDetail.pretotal | number:2 }} + {{ floorsTotal.rent | number:2 }}</p>
+            </td>
+            <td width="45%" valign=top style='width:12.44%;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:16.15pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal;text-align:right;'><b>{{ floorDetail.total | number:2 }}</b></p>
+            </td>
+        </tr>
+        <tr style='height:13.0pt'>
+            <td width="" colspan=3 style='width:65.4%;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt;height:13.0pt'>
+                <p class=MsoNormal align=right style='margin-bottom:0in;margin-bottom:.0001pt;
+  text-align:right;line-height:normal'><b>Total</b></p>
+            </td>
+            <td width="" style='width:34.6%;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt;height:13.0pt'>
+                <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+  normal;text-align:right;'><b>{{ floorsTotal.total | number }}</b></p>
+            </td>
+        </tr>
+    </table>
+
+    <p class=MsoNormal>&nbsp;</p>
+
+    <p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+<script>
+    var app = angular.module("calculator", []);
+    app.controller("BillController", ['$scope', '$http', '$filter', function($scope, $http,$filter) {
+        $scope.billDetails = {
+            'heading' : 'Electricity Bill Calculation',
+            'payable' : 35265,
+            'units' : 3689,
+            'rent' : 119
+        };
+        $scope.floorsDetails = [
+            {
+                'fname':'Ground Floor',
+                'units': 662,
+                'pretotal' : 0,
+                'total' : 0
+            },{
+                'fname':'1st Floor',
+                'units': 458,
+                'pretotal' : 0,
+                'total' : 0
+            },{
+                'fname':'2nd Floor',
+                'units': 367,
+                'pretotal' : 0,
+                'total' : 0
+            },{
+                'fname':'3rd Floor',
+                'units': 707,
+                'pretotal' : 0,
+                'total' : 0
+            }
+        ];
+
+        $scope.unitCost = ($scope.billDetails.payable / $scope.billDetails.units);
+
+
+        $scope.calculate = function() {
+
+            $scope.floorsTotal = {
+                'units' : 0,
+                'diff_units' : 0,
+
+                'pretotal' : 0,
+                'diff_pretotal' : 0,
+
+                'diff_actual' : 0,
+                'subtotal' : 0,
+                'rent' : $scope.billDetails.rent / $scope.floorsDetails.length,
+
+                'total' : 0
+            };
+
+            //Calculate unit cost
+            $scope.unitCost = $filter('number')(($scope.billDetails.payable / $scope.billDetails.units), 2);
+
+            angular.forEach($scope.floorsDetails,  function(floor, key){
+                //Update floor pretotal
+                floor.pretotal = floor.units * $scope.unitCost;
+
+                //Increment floorsTotal
+                $scope.floorsTotal.pretotal += floor.pretotal;
+                $scope.floorsTotal.units += floor.units;
+
+            });
+
+            //Difference
+            $scope.floorsTotal.diff_units = $scope.billDetails.units - $scope.floorsTotal.units;
+            $scope.floorsTotal.diff_pretotal = $scope.billDetails.payable - $scope.floorsTotal.pretotal;
+
+            //Minimize
+            $scope.floorsTotal.diff_actual = $scope.floorsTotal.diff_pretotal - $scope.billDetails.rent;
+
+            angular.forEach($scope.floorsDetails,  function(floor, key){
+
+                //Total total
+                $scope.floorsTotal.total += floor.total = ( floor.units / $scope.floorsTotal.units * $scope.floorsTotal.diff_actual ) + floor.pretotal + $scope.floorsTotal.rent;
+
+                console.log(floor.total);
+
+            });
+            //$scope.floorsTotal.total += $scope.floorsTotal.diff_pretotal - $scope.billDetails.rent;
+
+
+        };
+
+        $scope.addNew = function(personalDetail){
+            $scope.floorsDetails.push({
+                'fname': "",
+                'units': 0,
+                'pretotal' : 0,
+                'subtotal' : 0,
+                'total' : 0
+            });
+        };
+
+        $scope.remove = function(){
+            var newDataList=[];
+            $scope.selectedAll = false;
+            angular.forEach($scope.floorsDetails, function(selected){
+                if(!selected.selected){
+                    newDataList.push(selected);
+                }
+            });
+            $scope.floorsDetails = newDataList;
+        };
+
+        $scope.checkAll = function () {
+            if (!$scope.selectedAll) {
+                $scope.selectedAll = true;
+            } else {
+                $scope.selectedAll = false;
+            }
+            angular.forEach($scope.floorsDetails, function(personalDetail) {
+                personalDetail.selected = $scope.selectedAll;
+            });
+        };
+
+
+    }]);
+</script>
+
+</body>
+
+</html>
